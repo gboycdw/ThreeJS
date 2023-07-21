@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import "./Styles.css";
 import MainPage from "./Pages/MainPage";
-import TestPage from "./Pages/TestPage";
+import TestPage from "./Pages/MovingCubic";
 
 function App() {
   return (
