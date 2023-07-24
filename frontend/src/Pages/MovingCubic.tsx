@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import * as THREE from "three";
 import ControllBox from "../Components/ControllBox";
 
-function TestPage() {
+function MovingCubic() {
   //   const mountRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [browserWidth, setBrouserWidth] = useState(1024);
@@ -56,4 +56,4 @@ function TestPage() {
     </>
   );
 }
-export default TestPage;
+export default MovingCubic;
