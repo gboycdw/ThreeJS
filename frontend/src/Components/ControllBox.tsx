@@ -36,7 +36,8 @@ function ControllBox(props: ControllerType) {
         <input
           style={{ width: "42px", border: "1px solid", textAlign: "center" }}
           // className="w-50px h-10px"
-          defaultValue={5}
+          type="number"
+          // defaultValue={5}
           onChange={(e) => {
             setCameraDepth(parseInt(e.target.value));
           }}
