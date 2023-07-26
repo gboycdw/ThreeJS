@@ -117,6 +117,7 @@ function MovingCubic2() {
             shadow-camera-bottom={-100}
           />
           <pointLight position={[10, 10, 10]} />
+          <OrbitControls />
           <RotatingCube
             cameraDepth={cameraDepth}
             mouseDownClientX={mouseDownClientX}
