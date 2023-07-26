@@ -4,6 +4,7 @@ import { Box } from "@react-three/drei";
 import ControllBox from "../Components/ControllBox";
 import Checkbox from "../Components/CheckBox";
 import { OrbitControls } from "@react-three/drei";
+import THREE from "three";
 
 interface RotatingProps {
   cameraDepth: number;
@@ -14,7 +15,6 @@ interface RotatingProps {
   currentClientX: number;
   currentClientY: number;
   autoRotation: boolean;
-  customRotation: boolean;
 }
 
 function RotatingCube(props: RotatingProps) {
@@ -24,24 +24,11 @@ function RotatingCube(props: RotatingProps) {
     mouseUpClientX,
     mouseUpClientY,
     cameraDepth,
-    customRotation,
+
     autoRotation,
   } = props;
   const cubeRef = useRef<any>(null);
 
-  // // 마우스 휠 컨트롤 관련
-
-  useEffect(() => {
-    if (cubeRef.current) {
-      if (customRotation) {
-        cubeRef.current.rotation.y +=
-          (mouseUpClientX - mouseDownClientX) / 1000;
-        cubeRef.current.rotation.x +=
-          (mouseUpClientY - mouseDownClientY) / 1000;
-      }
-    }
-  }, [mouseDownClientX, mouseDownClientY, mouseUpClientX, mouseUpClientY]);
-  // 자동회전 관련
   useFrame(() => {
     if (cubeRef.current) {
       if (autoRotation) {
@@ -52,12 +39,9 @@ function RotatingCube(props: RotatingProps) {
   });
 
   return (
-    <Box
-      ref={cubeRef}
-      args={[1, 1, 1]}
-      position={[0, 0, cameraDepth]}
-      material-color="skyblue"
-    />
+    <Box ref={cubeRef} args={[1, 1, 1]} position={[0, 0, cameraDepth]}>
+      <meshStandardMaterial attach="material" color="skyblue" />
+    </Box>
   );
 }
 
@@ -117,7 +101,7 @@ function MovingCubic2() {
             shadow-camera-bottom={-100}
           />
           <pointLight position={[10, 10, 10]} />
-          <OrbitControls />
+          {customRotation && <OrbitControls />}
           <RotatingCube
             cameraDepth={cameraDepth}
             mouseDownClientX={mouseDownClientX}
@@ -127,7 +111,6 @@ function MovingCubic2() {
             mouseUpClientX={mouseUpClientX}
             mouseUpClientY={mouseUpClientY}
             autoRotation={autoRotation}
-            customRotation={customRotation}
           />
         </Canvas>
       </div>
