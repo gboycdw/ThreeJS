@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { RefObject, useRef, useState } from "react";
+import { Canvas, Vector2 } from "@react-three/fiber";
 import SelectShapes from "./SelectShapes";
 import Checkbox from "../Components/CheckBox";
 import { OrbitControls } from "@react-three/drei";
+import * as THREE from "three";
+import { useControls } from "leva";
 
 interface RotatingProps {
   cameraDepth: number;
@@ -21,12 +23,79 @@ function MovingCubic2() {
   const [autoRotation, setAutoRotation] = useState(false);
   const [customRotation, setCustomRotation] = useState(false);
   const [shapes, setShapes] = useState("Cubic");
+  const ambientRef = useRef<THREE.AmbientLight>(null);
+  const pointRef = useRef<THREE.PointLight>(null);
+  const directionalRef = useRef<THREE.DirectionalLight>(null);
+
+  useControls("Ambient Light", {
+    visible: {
+      value: false,
+      onChange: (v) => {
+        if (ambientRef.current) {
+          ambientRef.current.visible = v;
+        }
+      },
+    },
+    color: {
+      value: "white",
+      onChange: (v) => {
+        if (ambientRef.current) {
+          ambientRef.current.color = new THREE.Color(v);
+        }
+      },
+    },
+  });
+
+  useControls("Directional Light", {
+    visible: {
+      value: true,
+      onChange: (v) => {
+        if (directionalRef.current) {
+          directionalRef.current.visible = v;
+        }
+      },
+    },
+    color: {
+      value: "white",
+      onChange: (v) => {
+        if (directionalRef.current) {
+          directionalRef.current.color = new THREE.Color(v);
+        }
+      },
+    },
+  });
+
+  useControls("Point Light", {
+    visible: {
+      value: false,
+      onChange: (v) => {
+        if (pointRef.current) {
+          pointRef.current.visible = v;
+        }
+      },
+    },
+    color: {
+      value: "white",
+      onChange: (v) => {
+        if (pointRef.current) {
+          pointRef.current.color = new THREE.Color(v);
+        }
+      },
+    },
+  });
 
   return (
     <>
       <div style={{ width: "1024px", height: "768px" }}>
         <div style={{ border: "1px solid black", padding: "5px" }}>
           <div>
+            <button
+              onClick={() => {
+                console.log(ambientRef);
+              }}
+            >
+              확인 ㄱㄱ
+            </button>
             <div>회전</div>
             <div>
               <Checkbox checked={autoRotation} onChange={setAutoRotation}>
@@ -79,7 +148,7 @@ function MovingCubic2() {
         </div>
         <div>{shapes}</div>
         <Canvas style={{ width: browserWidth, height: browserHeight }}>
-          <ambientLight />
+          <ambientLight ref={ambientRef} />
           <directionalLight
             castShadow
             position={[0, 10, 0]}
@@ -91,10 +160,14 @@ function MovingCubic2() {
             shadow-camera-right={100}
             shadow-camera-top={100}
             shadow-camera-bottom={-100}
+            ref={directionalRef}
           />
-          <pointLight position={[10, 10, 10]} />
+          <pointLight ref={pointRef} position={[1, 10, 1]} />
           {customRotation && <OrbitControls />}
           <SelectShapes option={autoRotation} shapes={shapes} />
+          <gridHelper />
+          <axesHelper args={[25]} />
+          {pointRef.current && <pointLightHelper args={[pointRef.current]} />}
         </Canvas>
       </div>
     </>
