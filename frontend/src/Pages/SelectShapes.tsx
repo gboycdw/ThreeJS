@@ -17,17 +17,17 @@ function SelectShapes(props: { option: boolean; shapes: string }) {
   return (
     <>
       {shapes === "Cubic" && (
-        <Box ref={shapesRef} args={[1, 1, 1]}>
+        <Box ref={shapesRef} args={[1, 1, 1]} position={[0, 1, 0]}>
           <meshStandardMaterial attach="material" color="skyblue" />
         </Box>
       )}
       {shapes === "Torus" && (
-        <Torus ref={shapesRef} args={[1, 0.5, 32, 100]}>
+        <Torus ref={shapesRef} args={[1, 0.5, 50, 50]} position={[0, 1.5, 0]}>
           <meshStandardMaterial attach="material" color="skyblue" />
         </Torus>
       )}
       {shapes === "Sphere" && (
-        <Sphere ref={shapesRef} args={[1, 32, 32]}>
+        <Sphere ref={shapesRef} args={[1, 32, 32]} position={[0, 1.5, 0]}>
           <meshStandardMaterial attach="material" color="skyblue" />
         </Sphere>
       )}
