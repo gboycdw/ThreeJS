@@ -1,5 +1,6 @@
-import { Box, Torus, Sphere } from "@react-three/drei";
-import { ThreeElements, useFrame } from "@react-three/fiber";
+import { Box, Torus, Sphere, Stage } from "@react-three/drei";
+import Custom3D from "./Custom3D";
+import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
@@ -11,6 +12,7 @@ function SelectShapes(props: { option: boolean; shapes: string }) {
       shapesRef.current.rotation.x += 0.01;
       shapesRef.current.rotation.y += 0.01;
     }
+    // console.log(shapesRef);
   });
 
   return (
@@ -30,6 +32,7 @@ function SelectShapes(props: { option: boolean; shapes: string }) {
           <meshStandardMaterial attach="material" color="skyblue" />
         </Sphere>
       )}
+      {shapes === "custom" && <Custom3D ref={shapesRef} />}
     </>
   );
 }
