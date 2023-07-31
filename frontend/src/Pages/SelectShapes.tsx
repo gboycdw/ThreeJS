@@ -1,16 +1,15 @@
 import { Box, Torus, Sphere } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { ThreeElements, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
+import * as THREE from "three";
 
 function SelectShapes(props: { option: boolean; shapes: string }) {
   const { option, shapes } = props;
-  const shapesRef = useRef<any>(null);
+  const shapesRef = useRef<THREE.Mesh>(null);
   useFrame(() => {
-    if (shapesRef.current) {
-      if (option) {
-        shapesRef.current.rotation.x += 0.01;
-        shapesRef.current.rotation.y += 0.01;
-      }
+    if (shapesRef.current && option) {
+      shapesRef.current.rotation.x += 0.01;
+      shapesRef.current.rotation.y += 0.01;
     }
   });
 
