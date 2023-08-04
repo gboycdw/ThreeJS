@@ -21,18 +21,35 @@ export default function Custom3D(props: {
   const { move, center, setCenter } = props;
   const shapesRef = useRef<THREE.Mesh>(null);
   const filePath = "/3dSample/cat.obj";
-  const [model, setModel] = useState<THREE.Group | null>(null);
-
+  const [geometry, setGeometry] = useState<any>(null);
   const myObject = useLoader(OBJLoader, filePath);
-  useEffect(() => {
-    myObject.position.set(0, 0, 0);
-    setModel(myObject);
+  myObject.position.set(0, 0, 0);
 
-    console.log(model);
-  }, []);
+  useEffect(() => {
+    console.log(myObject);
+    // 기존 방법
+    // if (myObject) {
+    //   myObject.traverse((child) => {
+    //     if (child instanceof THREE.Mesh) {
+    //       const geo = child.geometry;
+    //       setGeometry(geo);
+    //     }
+    //   });
+    // }
+
+    // 다른 방법
+    if (myObject.children[0] instanceof THREE.Mesh) {
+      const geo2 = myObject.children[0].geometry;
+      // geometry를 사용하여 작업 수행
+      setGeometry(geo2);
+    }
+  }, [myObject]);
+
   const texturePath = "/texture/catt.png";
   const myTexture = useLoader(TextureLoader, texturePath);
-
+  myTexture.repeat.set(2, 1);
+  myTexture.wrapS = THREE.RepeatWrapping;
+  myTexture.wrapT = THREE.RepeatWrapping;
   const moving = { dx: 0, dy: 0, rotation: 0 };
   useFrame(() => {
     if (shapesRef.current) {
@@ -71,7 +88,6 @@ export default function Custom3D(props: {
       }
       setCenter(false);
     }
-    console.log(shapesRef);
   }, [center]);
   // useEffect(() => {
   //   if (shapesRef.current) {
@@ -94,15 +110,14 @@ export default function Custom3D(props: {
 
   return (
     <>
-      {model && (
-        <mesh ref={shapesRef}>
-          <primitive object={model}>
-            <meshStandardMaterial
-              map={myTexture}
-              attach="material"
-              color="red"
-            />
-          </primitive>
+      {geometry && (
+        <mesh ref={shapesRef} geometry={geometry}>
+          <meshStandardMaterial map={myTexture} attach="material" />
+        </mesh>
+      )}
+      {geometry && (
+        <mesh ref={shapesRef} geometry={geometry}>
+          <meshStandardMaterial map={myTexture} attach="material" />
         </mesh>
       )}
     </>

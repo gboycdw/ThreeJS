@@ -23,8 +23,9 @@ function SelectShapes(props: {
 }) {
   const { option, shapes, move, center, setCenter } = props;
   const shapesRef = useRef<THREE.Mesh>(null);
-  const texturePath = "/texture/earth.jpg";
-  const myTexture = useLoader(TextureLoader, texturePath);
+
+  const earthTexture = useLoader(TextureLoader, "/texture/earth.jpg");
+  const donutTexture = useLoader(TextureLoader, "/texture/donut.png");
 
   useFrame(() => {
     if (shapesRef.current && option) {
@@ -45,15 +46,20 @@ function SelectShapes(props: {
       )}
       {shapes === "Torus" && (
         <Torus ref={shapesRef} args={[1, 0.5, 50, 50]} position={[0, 1.5, 0]}>
-          <meshStandardMaterial attach="material" color="skyblue" />
+          <meshStandardMaterial
+            map={donutTexture}
+            attach="material"
+            // color=""
+          />
         </Torus>
       )}
       {shapes === "Sphere" && (
         <Sphere ref={shapesRef} args={[1, 32, 32]} position={[0, 1.5, 0]}>
           <meshStandardMaterial
-            map={myTexture}
+            // normalMap={earthTexture}
+            map={earthTexture}
             attach="material"
-            color="skyblue"
+            // color="skyblue"
           />
         </Sphere>
       )}
