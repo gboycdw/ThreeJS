@@ -5,14 +5,6 @@ import cors from "cors";
 
 const app = express();
 const server = http.createServer(app);
-// Cors
-// app.use(cors());
-app.use(
-  cors({
-    origin: "http://localhost:3002",
-  })
-);
-
 // Router
 const router = express.Router();
 
@@ -27,9 +19,19 @@ const PORT = 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+// Cors
+const corsOptions = {
+  origin: "http://localhost:3002",
+};
 
+app.use(cors(corsOptions));
 // Websoket
-const io = new SocketIOServer(server); // 추후 server => server, corsOption 으로 변경
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: "http://localhost:3002",
+    methods: ["GET", "POST"],
+  },
+});
 io.on("connection", (socket) => {
   console.log("새 클라이언트가 연결됨");
 
