@@ -6,9 +6,9 @@ function Chat() {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
   const ENDPOINT = "http://localhost:5000"; // env로 수정 필요함
-  let socket;
+
   useEffect(() => {
-    socket = io(ENDPOINT);
+    let socket = io(ENDPOINT);
 
     console.log("연결됨?", socket);
 
@@ -20,13 +20,15 @@ function Chat() {
       setName(name);
       setRoom(room);
 
-      //   socket.emit("join", { name, room });
+      socket.emit("join", { name, room });
     }
 
     // Clean up the socket connection on unmount
-    // return () => {
-    //     socket.disconnect();
-    // };
+    return () => {
+      socket.disconnect();
+      socket.emit("disconnent");
+      socket.off();
+    };
   }, [ENDPOINT]);
 
   return (
