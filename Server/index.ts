@@ -1,17 +1,13 @@
-import express from "express";
-import http from "http";
+import { server } from "./src/app";
 import { Server as SocketIOServer } from "socket.io";
-import cors from "cors";
 
-const app = express();
-const server = http.createServer(app);
-// Router
-const router = express.Router();
-
-router.get("/", (req, res) => {
-  res.send("서버 정상 동작 중 : 메인 페이지");
-});
-app.use(router);
+import {
+  addUser,
+  removeUser,
+  getUser,
+  getUsersInRoom,
+  allUser,
+} from "./src/user";
 
 // Server On
 const PORT = 5000;
@@ -19,34 +15,65 @@ const PORT = 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-// Cors
-const corsOptions = {
-  origin: "http://localhost:3002",
-};
 
-app.use(cors(corsOptions));
 // Websoket
 const io = new SocketIOServer(server, {
   cors: {
     origin: "http://localhost:3002",
     methods: ["GET", "POST"],
   },
+  pingInterval: 100,
+  pingTimeout: 5000,
 });
+
+// socket function
 io.on("connection", (socket) => {
-  console.log("새 클라이언트가 연결됨");
-
-  socket.on("join", (name, room) => {
-    console.log(name, room);
+  socket.on("join", ({ name, room }, cb) => {
+    console.log("클라이언트가 들어옴", socket.id);
+    const { error, user } = addUser({ id: socket.id, name, room });
+    if (error) return error;
+    if (user) {
+      socket.emit("message", {
+        user: "admin",
+        text: `${user.name}님 ㅎㅇ요, ${user.room}에 오신것을 환영함.`,
+      });
+      socket.broadcast.to(user.room).emit("message", {
+        user: "admin",
+        text: `${user.name}이 접속했습니다.`,
+      });
+      socket.join(user.room);
+      cb();
+    }
   });
 
-  // 클라이언트가 메시지를 보낼 때
-  socket.on("chat message", (msg) => {
-    console.log("메시지 :", msg);
-    io.emit("chat message", msg); // 모든 클라이언트에게 메시지 전달
+  socket.on("searchUser", () => {
+    const data = allUser();
+    console.log("모든 유저 정보", data);
   });
+
+  socket.on("sendMessage", (msg, cb) => {
+    console.log("소켓정보", socket.id);
+    const user: any = getUser(socket.id);
+    if (user.room && user.name) {
+      io.to(user.room).emit("message", { user: user.name, text: msg });
+    }
+    cb();
+  });
+
+  // // 클라이언트가 메시지를 보낼 때
+  // socket.on("chat message", (msg) => {
+  //   console.log("메시지 :", msg);
+  //   io.emit("chat message", msg); // 모든 클라이언트에게 메시지 전달
+  // });
 
   // 클라이언트가 연결을 끊을 때
   socket.on("disconnect", () => {
-    console.log("클라이언트가 떠났음");
+    const user: any = removeUser(socket.id);
+    if (user) {
+      io.to(user.room).emit("message", {
+        user: "admin",
+        text: `${user.name}님이 퇴장하였습니다.`,
+      });
+    }
   });
 });
