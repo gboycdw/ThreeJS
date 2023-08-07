@@ -32,6 +32,18 @@ function MainPage() {
         >
           React three Fiber 테스트 페이지로
         </button>
+        <button
+          style={{
+            border: "1px solid black",
+            borderRadius: "10px",
+            width: "95px",
+          }}
+          onClick={() => {
+            navigate("/join");
+          }}
+        >
+          Websoket 테스트 페이지로
+        </button>
       </div>
     </div>
   );
