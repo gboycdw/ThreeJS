@@ -22,6 +22,7 @@ const io = new SocketIOServer(server, {
 
 // socket function
 io.on("connection", (socket) => {
+  const nowUser = { name: "", room: "" };
   socket.on("join", ({ name, room }, cb) => {
     console.log("클라이언트가 들어옴", socket.id);
     const { error, user } = addUser({ id: "", name, room });
@@ -36,6 +37,8 @@ io.on("connection", (socket) => {
         text: `${user.name}이 접속했습니다.`,
       });
       socket.join(user.room);
+      nowUser.name = user.name;
+      nowUser.room = user.room;
       cb();
     }
   });
@@ -82,6 +85,14 @@ io.on("connection", (socket) => {
       socket.broadcast.to(user.room).emit("message", {
         user: "admin",
         text: `${user.name}님이 퇴장하였습니다.`,
+      });
+    }
+  });
+  socket.on("disconnect", () => {
+    if (nowUser.name && nowUser.room) {
+      socket.broadcast.to(nowUser.room).emit("message", {
+        user: "admin",
+        text: `${nowUser.name}님이 퇴장하였습니다.`,
       });
     }
   });
