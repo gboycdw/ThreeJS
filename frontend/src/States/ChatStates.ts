@@ -4,7 +4,7 @@ import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist();
 
-interface MessageType {
+export interface MessageType {
   user: string;
   text: string;
 }
@@ -13,5 +13,11 @@ interface MessageType {
 export const messageState = atom<any[]>({
   key: "messageState",
   default: [],
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const socketIoState = atom<any>({
+  key: "socketState",
+  default: "",
   effects_UNSTABLE: [persistAtom],
 });

@@ -1,13 +1,7 @@
 import { server } from "./src/app";
 import { Server as SocketIOServer } from "socket.io";
 
-import {
-  addUser,
-  removeUser,
-  getUser,
-  getUsersInRoom,
-  allUser,
-} from "./src/user";
+import { addUser, removeUser, getUser, changeUserName, User } from "./src/user";
 
 // Server On
 const PORT = 5000;
@@ -22,7 +16,7 @@ const io = new SocketIOServer(server, {
     origin: "http://localhost:3002",
     methods: ["GET", "POST"],
   },
-  pingInterval: 100,
+  pingInterval: 10000,
   pingTimeout: 5000,
 });
 
@@ -30,7 +24,7 @@ const io = new SocketIOServer(server, {
 io.on("connection", (socket) => {
   socket.on("join", ({ name, room }, cb) => {
     console.log("클라이언트가 들어옴", socket.id);
-    const { error, user } = addUser({ id: socket.id, name, room });
+    const { error, user } = addUser({ id: "", name, room });
     if (error) return error;
     if (user) {
       socket.emit("message", {
@@ -46,16 +40,31 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("searchUser", () => {
-    const data = allUser();
-    console.log("모든 유저 정보", data);
-  });
-
-  socket.on("sendMessage", (msg, cb) => {
-    console.log("소켓정보", socket.id);
-    const user: any = getUser(socket.id);
+  socket.on("sendMessage", (name, msg, cb) => {
+    const user: User = getUser(name);
     if (user.room && user.name) {
       io.to(user.room).emit("message", { user: user.name, text: msg });
+    }
+    cb();
+  });
+
+  // 닉네임 변경 시도
+  socket.on("change", (name, newname, cb) => {
+    const user: User = getUser(name);
+    const { room } = user;
+    const data: string[] = changeUserName(name, newname);
+
+    if (data.length > 1) {
+      socket.emit("message", {
+        user: "admin",
+        text: `닉네임 변경 성공. ${name} → ${newname}`,
+      });
+      socket.broadcast.to(room).emit("message", {
+        user: "admin",
+        text: `${name}님이 ${newname}으로 닉네임을 변경함.`,
+      });
+    } else {
+      socket.emit("result", true);
     }
     cb();
   });
@@ -67,10 +76,10 @@ io.on("connection", (socket) => {
   // });
 
   // 클라이언트가 연결을 끊을 때
-  socket.on("disconnect", () => {
-    const user: any = removeUser(socket.id);
+  socket.on("quit", (name) => {
+    const user: User | undefined = removeUser(name);
     if (user) {
-      io.to(user.room).emit("message", {
+      socket.broadcast.to(user.room).emit("message", {
         user: "admin",
         text: `${user.name}님이 퇴장하였습니다.`,
       });
