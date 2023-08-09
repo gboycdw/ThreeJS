@@ -1,5 +1,3 @@
-import { v4 } from "uuid";
-
 export interface User {
   id: string;
   name: string;
@@ -7,31 +5,31 @@ export interface User {
 }
 
 const defaultUser: User = {
-  id: "dikfjalksdfjlk",
+  id: "undefined",
   name: "anonymous",
   room: "prison",
 };
 
 const users: User[] = [];
 
-function addUser({ name, room }: User) {
+function addUser({ id, name, room }: User) {
   name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
-  const uid = v4();
-  const existUser = users.find(
+  const index = users.findIndex(
     (user: User) => user.room === room && user.name === name
   );
-  if (existUser) {
+  if (index !== -1) {
     return { error: "중복된 유저이름" };
+  } else {
+    const user = { id: id, name: name, room: room };
+    users.push(user);
+    console.log("유저수", users.length);
+    return { user: user };
   }
-  const user = { id: uid, name, room };
-  users.push(user);
-  return { user };
 }
 
 function removeUser(name: string) {
   const index = users.findIndex((user: User) => user.name === name);
-  console.log(index);
   if (index !== -1) {
     console.log(`${users[index].name} 유저가 떠남`);
     return users.splice(index, 1)[0];
@@ -45,15 +43,25 @@ function getUser(name: string) {
 
 function getUsersInRoom(room: string) {
   const usersInRoom = users.filter((user: User) => user.room === room);
-  return { users: usersInRoom };
+  return { usersInRoom };
 }
 
 function changeUserName(name: string, newname: string) {
   const index = users.findIndex((user: User) => user.name === name);
   if (index !== -1) {
-    users[index].name = newname;
+    // 기존 닉네임 검색결과, 해당 유저가 있으면
+    const checker = users.find((user: User) => user.name === newname);
+    if (checker) {
+      console.log("이미 있는 닉네임");
+      return [];
+    } else {
+      users[index].name = newname; // 중복이 없으면 해당 유저의 이름을 새로 지정한다.
+      return [name, newname];
+    }
+  } else {
+    console.log("해당 유저를 찾을 수 없음");
+    return [];
   }
-  return [name, newname];
 }
 
 export { addUser, removeUser, getUser, getUsersInRoom, changeUserName };

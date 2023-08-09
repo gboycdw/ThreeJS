@@ -3,7 +3,6 @@ import http from "http";
 import cors from "cors";
 
 const app = express();
-const server = http.createServer(app);
 // Router
 const router = express.Router();
 router.get("/", (req, res) => {
@@ -16,5 +15,5 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
+const server = http.createServer(app);
 export { app, server, router };
