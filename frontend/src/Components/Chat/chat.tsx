@@ -6,6 +6,12 @@ import { messageState } from "../../States/ChatStates";
 import { MyChat } from "../Common/chatBox";
 import styled from "styled-components";
 
+export interface User {
+  id: string;
+  name: string;
+  room: string;
+}
+
 const ENDPOINT = "http://localhost:5000"; // env로 수정 필요함
 let socket: Socket = io(ENDPOINT);
 
@@ -13,6 +19,7 @@ function Chat() {
   const [name, setName] = useState("");
   const [newName, setNewName] = useState("");
   const [room, setRoom] = useState("");
+  const [id, setId] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [chatList, setChatList] = useRecoilState(messageState);
   const navigate = useNavigate();
@@ -21,24 +28,27 @@ function Chat() {
     const searchParams = new URLSearchParams(window.location.search);
     const name = searchParams.get("name");
     const room = searchParams.get("room");
+    console.log("접속시도, 닉네임", name);
     if (name && room) {
       setName(name);
       setRoom(room);
-
-      socket.emit("join", { name, room }, (error: any) => {
+      socket.on("connect", () => {
+        setId([...id, socket.id]);
+      });
+      socket.emit("join", { name, room }, (error: string) => {
         if (error) {
-          console.log(error);
+          console.log("에러사유", error);
+          navigate("/join");
         } else {
-          console.log("ㄱㅁㅇ");
+          console.log("접속성공");
         }
       });
     }
-
     // Clean up the socket connection on unmount
     return () => {
       socket.off();
     };
-  }, [ENDPOINT]);
+  }, []);
 
   const scrollControl = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -51,7 +61,7 @@ function Chat() {
     }
   }, [chatList]);
 
-  const sendMessage = (e: any) => {
+  const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (message) {
       socket.emit("sendMessage", name, message, () => setMessage(""));
@@ -66,12 +76,17 @@ function Chat() {
 
   // 변경은 가능. 그런데 검증은 어떻게?
   const changeName = () => {
-    socket.emit("change", name, newName, () => {
-      console.log("닉변성공");
+    socket.emit("change", name, newName, (error: string) => {
+      if (error) {
+        setName(name);
+        alert("닉네임 중복 - 닉변실패");
+      } else {
+        setName(newName);
+        navigate(`/chat?name=${newName}&room=${room}`, { replace: true });
+        console.log("닉변성공");
+      }
     });
     // 변경 검증 로직 추가
-
-    setName(newName);
   };
 
   return (
@@ -79,6 +94,14 @@ function Chat() {
       Chat
       <div>방제 : {room}</div>
       <div>유저 : {name}</div>
+      <button
+        onClick={() => {
+          console.log("현재아이디", socket.id);
+          console.log("내아이디", id);
+        }}
+      >
+        체크용버튼
+      </button>
       <div>
         닉네임 변경
         <input
