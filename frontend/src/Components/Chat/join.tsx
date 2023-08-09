@@ -11,16 +11,16 @@ function Join() {
         <h1>입장</h1>
         <div>
           <input
-            placeholder="user-name"
+            placeholder="server-name"
             type="text"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setRoom(e.target.value)}
           />
         </div>
         <div>
           <input
-            placeholder="server-name"
+            placeholder="user-name"
             type="text"
-            onChange={(e) => setRoom(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
         <Link
