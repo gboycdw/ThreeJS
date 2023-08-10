@@ -44,6 +44,18 @@ function MainPage() {
         >
           Websoket 테스트 페이지로
         </button>
+        <button
+          style={{
+            border: "1px solid black",
+            borderRadius: "10px",
+            width: "95px",
+          }}
+          onClick={() => {
+            navigate("/gomao");
+          }}
+        >
+          통합 테스트 페이지로
+        </button>
       </div>
     </div>
   );

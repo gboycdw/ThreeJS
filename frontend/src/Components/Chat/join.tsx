@@ -5,9 +5,20 @@ function Join() {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
 
+  let dir = "";
+  let goto = "";
+  if (window.location.pathname === "/join") {
+    dir = `/chat?name=${name}&room=${room}`;
+    goto = "Websoket 채팅방";
+  } else {
+    dir = `./gomgom?name=${name}&room=${room}`;
+    goto = "3D Render 채팅방";
+  }
+
   return (
     <div>
       <div>
+        <div>현재 목적지 : {goto}</div>
         <h1>입장</h1>
         <div>
           <input
@@ -25,7 +36,7 @@ function Join() {
         </div>
         <Link
           onClick={(e) => (!name || !room ? e.preventDefault() : null)}
-          to={`/chat?name=${name}&room=${room}`}
+          to={dir}
         >
           <button type="submit">sign in</button>
         </Link>
