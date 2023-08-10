@@ -23,7 +23,11 @@ function addUser({ id, name, room }: User) {
   } else {
     const user = { id: id, name: name, room: room };
     users.push(user);
-    console.log("유저수", users.length);
+    console.log(
+      "유저수",
+      users.length,
+      users.map((a) => a.name)
+    );
     return { user: user };
   }
 }
