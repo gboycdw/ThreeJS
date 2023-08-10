@@ -1,9 +1,10 @@
-import React, { RefObject, useRef, useState, useEffect } from "react";
-import { Canvas, useLoader } from "@react-three/fiber";
+import React, { useState } from "react";
+import { Canvas } from "@react-three/fiber";
 import SelectShapes from "./SelectShapes";
-import Checkbox from "../Components/CheckBox";
+import Checkbox from "../CheckBox";
 import { OrbitControls } from "@react-three/drei";
-import Light from "../Components/Light/Light";
+import Light from "../Light/Light";
+import styled from "styled-components";
 
 function MovingCubic2() {
   const [browserWidth, setBrowserWidth] = useState(1024);
@@ -122,12 +123,8 @@ function MovingCubic2() {
           <div style={{ display: "flex", height: "64px", border: "1px solid" }}>
             {/* 이동 조정 */}
             <div>Moving</div>
-            <button
+            <ControllButton
               style={{
-                width: "45px",
-                height: "30px",
-                padding: "7px",
-                fontSize: "40px",
                 color: move.goStraight ? "gray" : "black",
               }}
               onClick={() => {
@@ -139,13 +136,9 @@ function MovingCubic2() {
               }}
             >
               ▲
-            </button>
-            <button
+            </ControllButton>
+            <ControllButton
               style={{
-                width: "45px",
-                height: "30px",
-                padding: "7px",
-                fontSize: "40px",
                 color: move.goBack ? "gray" : "black",
               }}
               onClick={() => {
@@ -158,13 +151,9 @@ function MovingCubic2() {
               }}
             >
               ▼
-            </button>
-            <button
+            </ControllButton>
+            <ControllButton
               style={{
-                width: "45px",
-                height: "30px",
-                padding: "7px",
-                fontSize: "40px",
                 color: move.goLeft ? "gray" : "black",
               }}
               onClick={() => {
@@ -176,13 +165,9 @@ function MovingCubic2() {
               }}
             >
               ◀
-            </button>
-            <button
+            </ControllButton>
+            <ControllButton
               style={{
-                width: "45px",
-                height: "30px",
-                padding: "7px",
-                fontSize: "40px",
                 color: move.goRight ? "gray" : "black",
               }}
               onClick={() => {
@@ -194,16 +179,12 @@ function MovingCubic2() {
               }}
             >
               ▶
-            </button>
+            </ControllButton>
 
             {/* 회전 조정 */}
             <div>Rotation</div>
-            <button
+            <ControllButton
               style={{
-                width: "45px",
-                height: "30px",
-                padding: "7px",
-                fontSize: "40px",
                 color: move.turnLeft ? "gray" : "black",
               }}
               onClick={() => {
@@ -215,13 +196,9 @@ function MovingCubic2() {
               }}
             >
               ☞
-            </button>
-            <button
+            </ControllButton>
+            <ControllButton
               style={{
-                width: "45px",
-                height: "30px",
-                padding: "7px",
-                fontSize: "40px",
                 color: move.turnRight ? "gray" : "black",
               }}
               onClick={() => {
@@ -233,15 +210,11 @@ function MovingCubic2() {
               }}
             >
               ☜
-            </button>
+            </ControllButton>
             {/* 중앙으로 이동 */}
             <div>Reset(제자리로)</div>
-            <button
+            <ControllButton
               style={{
-                width: "45px",
-                height: "30px",
-                padding: "7px",
-                fontSize: "40px",
                 color: move.turnLeft ? "gray" : "black",
               }}
               onClick={() => {
@@ -249,7 +222,7 @@ function MovingCubic2() {
               }}
             >
               ◎
-            </button>
+            </ControllButton>
           </div>
         )}
         <div>조명 추가/삭제</div>
@@ -268,3 +241,13 @@ function MovingCubic2() {
 }
 
 export default MovingCubic2;
+
+const ControllButton = styled.button`
+  width: 35px;
+  height: 35px;
+  padding: 7px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

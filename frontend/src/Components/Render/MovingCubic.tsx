@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import * as THREE from "three";
-import ControllBox from "../Components/ControllBox";
+import ControllBox from "../ControllBox";
 
 function MovingCubic() {
   //   const mountRef = useRef<HTMLDivElement>(null);
