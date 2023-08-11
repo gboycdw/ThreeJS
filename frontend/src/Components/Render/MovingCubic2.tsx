@@ -1,17 +1,37 @@
-import React, { useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { useState, useRef, useEffect } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import SelectShapes from "./SelectShapes";
 import Checkbox from "../CheckBox";
 import { OrbitControls } from "@react-three/drei";
 import Light from "../Light/Light";
 import styled from "styled-components";
 
-function MovingCubic2() {
+function MovingCubic2(props: any) {
+  const { controls, setControls } = props;
   const [browserWidth, setBrowserWidth] = useState(1024);
   const [browserHeight, setBrowserHeight] = useState(768);
   const [autoRotation, setAutoRotation] = useState(true);
   const [customRotation, setCustomRotation] = useState(true);
   const [shapes, setShapes] = useState("custom");
+
+  const orbitRef = useRef<any>(null);
+  const orbitHandler = () => {
+    const orbit = orbitRef.current;
+    if (orbit) {
+      console.log(orbit.object);
+      // orbit.object.rotation._z += 1;
+      // orbit.object.rotation._y += 1;
+      // orbit.object.rotation._x += 10;
+      // orbit.object.position.x += 1;
+      // orbit.object.position.y += 1;
+      // orbit.object.position.z += 1;
+    }
+  };
+  // useFrame(() => {
+  //   if (orbitRef.current) {
+  //     orbitRef.current.object.position.z = +1;
+  //   }
+  // });
 
   // 커스텀 조명 추가
   // const newlight = useControls("additional light-1", {
@@ -38,6 +58,7 @@ function MovingCubic2() {
       <div style={{ width: "1024px", height: "768px" }}>
         <div style={{ border: "1px solid black", padding: "5px" }}>
           <div>
+            <button onClick={orbitHandler}>orbit변수</button>
             <div>회전</div>
             <div>
               {shapes !== "custom" && (
@@ -106,7 +127,8 @@ function MovingCubic2() {
         <div>{shapes}</div>
         <div style={{ border: "1px solid black" }}>
           <Canvas style={{ width: browserWidth, height: browserHeight }}>
-            {customRotation && <OrbitControls />}
+            {customRotation && <OrbitControls ref={orbitRef} />}
+            {/* <OrbitControls ref={orbitRef} /> */}
             <SelectShapes
               option={autoRotation}
               shapes={shapes}
