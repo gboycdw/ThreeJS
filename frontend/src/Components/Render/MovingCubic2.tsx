@@ -1,32 +1,48 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import SelectShapes from "./SelectShapes";
+import { useRecoilState } from "recoil";
+import { serverMessageState } from "../../States/ChatStates";
 import Checkbox from "../CheckBox";
 import { OrbitControls } from "@react-three/drei";
 import Light from "../Light/Light";
 import styled from "styled-components";
+import { Vector3 } from "three";
 
 function MovingCubic2(props: any) {
   const { controls, setControls } = props;
-  const [browserWidth, setBrowserWidth] = useState(1024);
+  const [browserWidth] = useState(1024);
   const [browserHeight, setBrowserHeight] = useState(768);
   const [autoRotation, setAutoRotation] = useState(true);
   const [customRotation, setCustomRotation] = useState(true);
   const [shapes, setShapes] = useState("custom");
-
+  const [serverMsg] = useRecoilState(serverMessageState);
+  const [cameraPos, setCameraPos] = useState<any>(null);
+  const [cameraRot, setCameraRot] = useState<any>(null);
+  const [counter, setCounter] = useState(0);
+  const [cam, setCam] = useState<any>(null);
   const orbitRef = useRef<any>(null);
   const orbitHandler = () => {
     const orbit = orbitRef.current;
+
+    setCounter(counter + 1);
     if (orbit) {
       console.log(orbit.object);
+      setCam(orbit.object);
       // orbit.object.rotation._z += 1;
       // orbit.object.rotation._y += 1;
       // orbit.object.rotation._x += 10;
-      // orbit.object.position.x += 1;
-      // orbit.object.position.y += 1;
-      // orbit.object.position.z += 1;
+      orbit.object.position.x = 3;
+      orbit.object.position.y = 1;
+      orbit.object.position.z = 1;
     }
   };
+  // useEffect(() => {
+  //   if (orbitRef.current) {
+  //     setCameraPos(orbitRef.current.object.position);
+  //     setCameraRot(orbitRef.current.object.rotation);
+  //   }
+  // }, [counter]);
   // useFrame(() => {
   //   if (orbitRef.current) {
   //     orbitRef.current.object.position.z = +1;
@@ -43,22 +59,70 @@ function MovingCubic2(props: any) {
   //   positionZ: { value: 0, min: -10, max: 10 },
   // });
 
-  const [move, setMove] = useState({
+  const defaultMove = {
     turnLeft: false,
     turnRight: false,
     goStraight: false,
     goBack: false,
     goRight: false,
     goLeft: false,
-  });
+  };
+  const [move, setMove] = useState(defaultMove);
   const [center, setCenter] = useState(false);
+
+  useEffect(() => {
+    if (serverMsg === "/앞으로") {
+      setMove({
+        ...move,
+        goStraight: !move.goStraight,
+        goBack: move.goBack === true ? false : move.goBack,
+      });
+    }
+    if (serverMsg === "/뒤로") {
+      setMove({
+        ...move,
+        goBack: !move.goBack,
+        goStraight: move.goStraight === true ? false : move.goStraight,
+      });
+    }
+    if (serverMsg === "/멈춰") {
+      setMove(defaultMove);
+    }
+    if (serverMsg === "/제자리로") {
+      setCenter(true);
+    }
+    if (serverMsg === "/우로돌아") {
+      setMove({
+        ...move,
+        turnRight: !move.turnRight,
+        turnLeft: move.turnLeft === true ? false : move.turnLeft,
+      });
+    }
+    if (serverMsg === "/좌로돌아") {
+      setMove({
+        ...move,
+        turnRight: !move.turnRight,
+        turnLeft: move.turnLeft === true ? false : move.turnLeft,
+      });
+    }
+  }, [serverMsg]);
 
   return (
     <>
       <div style={{ width: "1024px", height: "768px" }}>
         <div style={{ border: "1px solid black", padding: "5px" }}>
           <div>
-            <button onClick={orbitHandler}>orbit변수</button>
+            <div>
+              <div>최근명령 : {serverMsg}</div>
+              <button onClick={orbitHandler}>orbit변수</button>
+              {orbitRef.current && (
+                <>
+                  <div>{counter}</div>
+                  <div>camera position: {cameraPos}</div>
+                  <div>camera rotation: {cameraRot}</div>
+                </>
+              )}
+            </div>
             <div>회전</div>
             <div>
               {shapes !== "custom" && (
@@ -127,7 +191,7 @@ function MovingCubic2(props: any) {
         <div>{shapes}</div>
         <div style={{ border: "1px solid black" }}>
           <Canvas style={{ width: browserWidth, height: browserHeight }}>
-            {customRotation && <OrbitControls ref={orbitRef} />}
+            {customRotation && <OrbitControls ref={orbitRef} camera={cam} />}
             {/* <OrbitControls ref={orbitRef} /> */}
             <SelectShapes
               option={autoRotation}
