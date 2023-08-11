@@ -21,3 +21,14 @@ export const socketIoState = atom<any>({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const loginModeState = atom<string>({
+  key: "loginModeState",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const serverMessageState = atom<string>({
+  key: "serverMessageState",
+  default: "",
+});
