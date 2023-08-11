@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  loginModeState,
+  messageState,
+  serverMessageState,
+} from "../../States/ChatStates";
 import { useNavigate } from "react-router-dom";
-import { messageState } from "../../States/ChatStates";
 import { MyChat } from "../Common/chatBox";
 import styled from "styled-components";
 
@@ -11,6 +15,17 @@ export interface User {
   name: string;
   room: string;
 }
+
+const def = [
+  "/오른쪽",
+  "/왼쪽",
+  "/뒤로",
+  "/앞으로",
+  "/멈춰",
+  "/제자리로",
+  "/우로돌아",
+  "/좌로돌아",
+];
 
 const ENDPOINT = "http://localhost:5000"; // env로 수정 필요함
 let socket: Socket = io(ENDPOINT);
@@ -22,6 +37,18 @@ function Chat() {
   const [id, setId] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [chatList, setChatList] = useRecoilState(messageState);
+  const [mode] = useRecoilState(loginModeState);
+  const [serverMsg, setServerMsg] = useRecoilState(serverMessageState);
+
+  let backUrl = "";
+  let changeUrl = "";
+  if (mode === "chat") {
+    backUrl = "/join";
+    changeUrl = `/chat?name=${newName}&room=${room}`;
+  } else if (mode === "3d") {
+    backUrl = "/gomao";
+    changeUrl = `./gomgom?name=${newName}&room=${room}`;
+  }
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,7 +65,7 @@ function Chat() {
       socket.emit("join", { name, room }, (error: string) => {
         if (error) {
           console.log("에러사유", error);
-          navigate("/join");
+          navigate(backUrl);
         } else {
           console.log("접속성공");
         }
@@ -47,12 +74,19 @@ function Chat() {
     // Clean up the socket connection on unmount
     return () => {
       socket.off();
+      setServerMsg("");
     };
   }, []);
 
   const scrollControl = useRef<HTMLDivElement>(null);
   useEffect(() => {
     socket.on("message", (message) => {
+      console.log(message.text);
+      if (def.includes(message.text)) {
+        console.log("명령받음", message.text);
+        setServerMsg(message.text);
+      }
+
       setChatList([...chatList, message]);
     });
     const scroll = scrollControl.current;
@@ -71,7 +105,7 @@ function Chat() {
 
   const leaveRoom = () => {
     socket.emit("quit", name);
-    navigate("/join");
+    navigate(backUrl);
   };
 
   // 변경은 가능. 그런데 검증은 어떻게?
@@ -82,7 +116,7 @@ function Chat() {
         alert("닉네임 중복 - 닉변실패");
       } else {
         setName(newName);
-        navigate(`/chat?name=${newName}&room=${room}`, { replace: true });
+        navigate(changeUrl, { replace: true });
         console.log("닉변성공");
       }
     });
@@ -94,6 +128,7 @@ function Chat() {
       Chat
       <div>방제 : {room}</div>
       <div>유저 : {name}</div>
+      <div>최근명령 : {serverMsg}</div>
       <button
         onClick={() => {
           console.log("현재아이디", socket.id);
