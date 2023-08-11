@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { loginModeState } from "../../States/ChatStates";
 
 function Join() {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
-
+  const [mode, setMode] = useRecoilState(loginModeState);
   let dir = "";
   let goto = "";
   if (window.location.pathname === "/join") {
     dir = `/chat?name=${name}&room=${room}`;
+    setMode("chat");
     goto = "Websoket 채팅방";
   } else {
     dir = `./gomgom?name=${name}&room=${room}`;
+    setMode("3d");
     goto = "3D Render 채팅방";
   }
 
@@ -41,6 +45,7 @@ function Join() {
           <button type="submit">sign in</button>
         </Link>
       </div>
+      <Link to="/">메인 페이지로</Link>
     </div>
   );
 }
