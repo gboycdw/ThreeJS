@@ -1,8 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import * as THREE from "three";
 import ControllBox from "../ControllBox";
+import { useLoaderData } from "react-router-dom";
+import { loader } from "../loader/loader";
 
 function MovingCubic() {
+  console.log("MovingCubic 컴포넌트 동작");
+
+  const initialData = useLoaderData() as Awaited<
+    ReturnType<ReturnType<typeof loader>>
+  >;
+
   //   const mountRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [browserWidth, setBrouserWidth] = useState(1024);
@@ -42,9 +50,14 @@ function MovingCubic() {
       renderer.dispose();
     };
   }, [browserHeight, browserWidth, cameraDepth]);
-
+  console.log("MovingCubic 컴포넌트 함수 실행완료");
   return (
     <>
+      <div
+        style={{ border: "1px solid", padding: "6px", width: "fit-content" }}
+      >
+        query로 받은 초기값 : {initialData.map((a: any) => a.categoryName)}
+      </div>
       <div style={{ width: "1024px", height: "768px" }}>
         <ControllBox
           setBrouserWidth={setBrouserWidth}
