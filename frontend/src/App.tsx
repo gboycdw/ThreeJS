@@ -8,13 +8,17 @@ import Chat from "./Components/Chat/chat";
 import Join from "./Components/Chat/join";
 import JoinPage from "./Pages/JoinPage";
 import { RecoilRoot } from "recoil";
-import { router } from "./router";
+import { router, queryClient } from "./router";
 import { RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+// const queryClient = new QueryClient();
 function App() {
   return (
     <RecoilRoot>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </RecoilRoot>
   );
 }
