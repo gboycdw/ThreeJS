@@ -7,10 +7,10 @@ import MovingCubic2 from "./Components/Render/MovingCubic2";
 import Chat from "./Components/Chat/chat";
 import Join from "./Components/Chat/join";
 import JoinPage from "./Pages/JoinPage";
-import checker from "./Components/loader/checker";
-import checker2 from "./Components/loader/checker2";
 import { QueryClient } from "@tanstack/react-query";
 import { loader } from "./Components/loader/loader";
+import { action } from "./Components/loader/action";
+import Error from "./Components/loader/error";
 export const queryClient = new QueryClient();
 
 export const router = createBrowserRouter([
@@ -21,8 +21,9 @@ export const router = createBrowserRouter([
   {
     path: "/test1",
     element: <MovingCubic />,
-    action: checker2,
+    action: action(queryClient),
     loader: loader(queryClient),
+    errorElement: <Error />,
   },
   {
     path: "/test2",
