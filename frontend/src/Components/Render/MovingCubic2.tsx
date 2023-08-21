@@ -7,10 +7,17 @@ import Checkbox from "../CheckBox";
 import { OrbitControls } from "@react-three/drei";
 import Light from "../Light/Light";
 import styled from "styled-components";
-import { Vector3 } from "three";
+import { query } from "../loader/loader";
+import { useQuery } from "@tanstack/react-query";
+import { queryClient } from "../../router";
 
 function MovingCubic2(props: any) {
   const { controls, setControls } = props;
+
+  const queryData = queryClient.getQueryData(query.queryKey);
+  const initialData = useQuery(query)?.data?.data || null;
+  console.log(queryData);
+
   const [browserWidth] = useState(1024);
   const [browserHeight, setBrowserHeight] = useState(768);
   const [autoRotation, setAutoRotation] = useState(true);
@@ -109,6 +116,13 @@ function MovingCubic2(props: any) {
 
   return (
     <>
+      {/* {initialData && (
+        <div
+          style={{ border: "1px solid", padding: "6px", width: "fit-content" }}
+        >
+          query로 받은 초기값 : {initialData.map((a: any) => a.categoryName)}
+        </div>
+      )} */}
       <div style={{ width: "1024px", height: "768px" }}>
         <div style={{ border: "1px solid black", padding: "5px" }}>
           <div>

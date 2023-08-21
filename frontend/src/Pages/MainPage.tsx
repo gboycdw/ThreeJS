@@ -1,9 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styles.css";
+import { queryClient } from "../router";
+import { query } from "../Components/loader/loader";
 
 function MainPage() {
   const navigate = useNavigate();
+  const [before, setBefore] = React.useState<any>(
+    queryClient.getQueryData(query.queryKey)
+  );
+  const [dd, setDd] = React.useState<any>(null);
+  React.useEffect(() => {
+    if (before && "data" in (before as Record<string, unknown>)) {
+      setDd((before as Record<string, unknown>).data);
+    }
+  }, []);
+
   return (
     <div>
       <div>메인페이지 입니다.</div>
@@ -56,6 +68,11 @@ function MainPage() {
         >
           통합 테스트 페이지로
         </button>
+      </div>
+      <div>
+        {typeof dd === "object" &&
+          dd &&
+          Object.values(dd).map((a: any) => a.categoryName)}
       </div>
     </div>
   );
