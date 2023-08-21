@@ -8,17 +8,28 @@ import Chat from "./Components/Chat/chat";
 import Join from "./Components/Chat/join";
 import JoinPage from "./Pages/JoinPage";
 import { RecoilRoot } from "recoil";
-import { router, queryClient } from "./router";
+import { router } from "./router";
 import { RouterProvider } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { queryClient } from "./router";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 
-// const queryClient = new QueryClient();
+const persister = createSyncStoragePersister({
+  storage: window.localStorage,
+});
+
 function App() {
   return (
     <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister }}
+      >
         <RouterProvider router={router} />
-      </QueryClientProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </PersistQueryClientProvider>
     </RecoilRoot>
   );
 }
