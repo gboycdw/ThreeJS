@@ -14,11 +14,11 @@ interface queryType {
   queryFn: () => AxiosPromise;
   [key: string]: string[] | (() => AxiosPromise) | number | boolean;
 }
-const query: queryType = {
+export const query: queryType = {
   queryKey: ["gomao"],
   queryFn: axiosGetData,
-  cacheTime: 100,
-  staleTime: 1,
+  cacheTime: 100000,
+  staleTime: 30000,
 };
 
 export const loader =
