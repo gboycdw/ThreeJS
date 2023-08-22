@@ -29,13 +29,14 @@ function Join() {
   }, [name, room]);
 
   return (
-    <div>
-      <div>
+    <div className="m-40 grid ">
+      <div className="justify-self-center">
         <div>현재 목적지 : {goto}</div>
         <h1>입장</h1>
         <div>
           <input
             placeholder="server-name"
+            className="border-2"
             type="text"
             onChange={(e) => setRoom(e.target.value)}
           />
@@ -43,6 +44,7 @@ function Join() {
         <div>
           <input
             placeholder="user-name"
+            className="border-2"
             type="text"
             onChange={(e) => setName(e.target.value)}
           />
@@ -51,10 +53,14 @@ function Join() {
           onClick={(e) => (!name || !room ? e.preventDefault() : null)}
           to={dir}
         >
-          <button type="submit">sign in</button>
+          <button className="border-2 bg-slate-200" type="submit">
+            sign in
+          </button>
         </Link>
       </div>
-      <Link to="/">메인 페이지로</Link>
+      <Link className="border-2 w-fit justify-self-center" to="/">
+        메인 페이지로
+      </Link>
     </div>
   );
 }
