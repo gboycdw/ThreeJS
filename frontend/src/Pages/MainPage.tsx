@@ -3,7 +3,6 @@ import { queryClient } from "../router";
 import { query } from "../Components/loader/loader";
 import MainButton from "../Components/Common/Button";
 import "../App.css";
-import { button } from "leva";
 
 function MainPage() {
   const [before, setBefore] = useState<any>(
@@ -24,17 +23,15 @@ function MainPage() {
     "Websoket 테스트",
     "통합 테스트",
   ];
-
+  const buttonStyle =
+    "p-3 m-2 border-2 border-black bg-slate-300 rounded-lg w-35 h-35";
   return (
     <div className="space-y-3 m-20 grid">
       <div className="justify-self-center">메인페이지 입니다.</div>
       <div className="flex  space-x-10 justify-self-center">
         {buttonPath.map((route: string, i: number) => {
           return (
-            <MainButton
-              route={route}
-              style="p-3 m-2 border-2 border-black bg-slate-300 rounded-lg w-35 h-35 "
-            >
+            <MainButton route={route} style={buttonStyle}>
               {buttonMsg[i]}
             </MainButton>
           );

@@ -43,6 +43,7 @@ const StyledMy = styled.ul`
   display: grid;
   justify-items: flex-end;
   padding-right: 38px;
+  margin: 5px 0px;
   background-color: rgb(243, 247, 185);
   align-items: center;
   justify-content: flex-end;
@@ -57,6 +58,7 @@ const StyledAdmin = styled.ul`
   color: darkgray;
   align-items: center;
   justify-content: center;
+  margin: 5px 0px;
   border: 1px solid;
   border-radius: 4px;
   list-style-type: none;
@@ -65,6 +67,8 @@ const StyledOthers = styled.ul`
   /* display: grid;
   justify-items: flex-end; */
   align-items: center;
+  padding-left: 14px;
+  margin: 5px 0px;
   background-color: white;
   border: 1px solid;
   border-radius: 4px;

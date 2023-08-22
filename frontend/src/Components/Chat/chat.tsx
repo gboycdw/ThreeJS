@@ -123,64 +123,66 @@ function Chat() {
   };
 
   return (
-    <div>
-      Chat
-      <div>방제 : {room}</div>
-      <div>유저 : {name}</div>
-      <div>최근명령 : {serverMsg}</div>
-      <button
-        onClick={() => {
-          console.log("현재아이디", socket.id);
-          console.log("내아이디", id);
-        }}
-      >
-        체크용버튼
-      </button>
-      <div>
-        닉네임 변경
-        <input
-          value={newName}
-          onChange={(e) => {
-            setNewName(e.target.value);
-          }}
-        />
-        <button onClick={changeName}>변경</button>
-      </div>
-      <button
-        onClick={() => {
-          setChatList([]);
-        }}
-      >
-        대화 초기화
-      </button>{" "}
-      <br />
-      <button
-        onClick={() => {
-          console.log(chatList);
-        }}
-      >
-        채팅 리스트 타입확인
-      </button>
-      <button onClick={leaveRoom}>채팅방 떠나기</button>
-      {/* 채팅방 구현 */}
-      <StyledChatContainer>
-        <StyledChatBox ref={scrollControl}>
-          <MyChat chatList={chatList} name={name} />
-        </StyledChatBox>
-        <StyledInputContainer>
-          <form onSubmit={sendMessage}>
-            <StyledInputBox
-              value={message}
+    <div className="grid">
+      <div className="grid w-fit space-y-3 border-2 m-2 p-2 bg-slate-200 justify-self-center">
+        <div className="bg-slate-100">
+          Chat
+          <div>방제 : {room}</div>
+          <div>유저 : {name}</div>
+          <div>
+            닉네임 변경
+            <input
+              value={newName}
+              className="bg-slate-200 border-2 border-black m-2 w-fit"
               onChange={(e) => {
-                e.preventDefault();
-
-                setMessage(e.target.value);
+                setNewName(e.target.value);
               }}
             />
-            <button type="submit">제출</button>
-          </form>
-        </StyledInputContainer>
-      </StyledChatContainer>
+            <button
+              className="bg-slate-200 border-2 border-black m-2 w-fit"
+              onClick={changeName}
+            >
+              변경
+            </button>
+          </div>
+          <div className="flex justify-between">
+            <button
+              className="bg-slate-200 border-2 border-black m-2 w-fit"
+              onClick={() => {
+                setChatList([]);
+              }}
+            >
+              대화 초기화
+            </button>
+            <br />
+            <button
+              className="bg-slate-200 border-2 border-black m-2 w-fit"
+              onClick={leaveRoom}
+            >
+              채팅방 떠나기
+            </button>
+          </div>
+          {/* 채팅방 구현 */}
+          <StyledChatContainer>
+            <StyledChatBox ref={scrollControl}>
+              <MyChat chatList={chatList} name={name} />
+            </StyledChatBox>
+            <StyledInputContainer>
+              <form onSubmit={sendMessage}>
+                <StyledInputBox
+                  value={message}
+                  onChange={(e) => {
+                    e.preventDefault();
+
+                    setMessage(e.target.value);
+                  }}
+                />
+                <button type="submit">제출</button>
+              </form>
+            </StyledInputContainer>
+          </StyledChatContainer>
+        </div>
+      </div>
     </div>
   );
 }

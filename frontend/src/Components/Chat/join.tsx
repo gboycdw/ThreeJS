@@ -29,7 +29,7 @@ function Join() {
   }, [name, room]);
 
   return (
-    <div className="m-40 grid ">
+    <div className="m-40 grid">
       <div className="justify-self-center">
         <div>현재 목적지 : {goto}</div>
         <h1>입장</h1>
