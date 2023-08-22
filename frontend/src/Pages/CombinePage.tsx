@@ -1,10 +1,9 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import MovingCubic2 from "../Components/Render/MovingCubic2";
 import Chat from "../Components/Chat/chat";
 
 function Combine() {
-  const [controls, setControls] = React.useState<any>(null);
+  const [controls, setControls] = useState<any>(null);
   return (
     <div style={{ display: "flex" }}>
       <MovingCubic2 setControls={setControls} controls={controls} />

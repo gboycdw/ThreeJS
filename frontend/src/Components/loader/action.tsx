@@ -1,4 +1,3 @@
-import axios, { AxiosPromise } from "axios";
 import type { QueryClient } from "@tanstack/query-core";
 import { LoaderFunctionArgs } from "react-router-dom";
 

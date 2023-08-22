@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ControllerType {
   setBrouserWidth: React.Dispatch<React.SetStateAction<number>>;
   setBrouserHeight: React.Dispatch<React.SetStateAction<number>>;

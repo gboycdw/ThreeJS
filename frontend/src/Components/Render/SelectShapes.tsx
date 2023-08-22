@@ -1,4 +1,4 @@
-import { Box, Torus, Sphere, Stage } from "@react-three/drei";
+import { Box, Torus, Sphere } from "@react-three/drei";
 import Custom3D from "./Custom3D";
 import { useRef } from "react";
 import * as THREE from "three";

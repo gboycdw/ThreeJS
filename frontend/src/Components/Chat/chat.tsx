@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   loginModeState,
   messageState,
@@ -81,9 +81,8 @@ function Chat() {
   const scrollControl = useRef<HTMLDivElement>(null);
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log(message.text);
       if (def.includes(message.text)) {
-        console.log("명령받음", message.text);
+        // console.log("명령받음", message.text);
         setServerMsg(message.text);
       }
 

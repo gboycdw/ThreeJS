@@ -1,18 +1,11 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import MainPage from "./Pages/MainPage";
-import MovingCubic from "./Components/Render/MovingCubic";
-import MovingCubic2 from "./Components/Render/MovingCubic2";
-import Chat from "./Components/Chat/chat";
-import Join from "./Components/Chat/join";
-import JoinPage from "./Pages/JoinPage";
+
 import { RecoilRoot } from "recoil";
 import { router } from "./router";
 import { RouterProvider } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "./router";
-import { QueryClientProvider } from "@tanstack/react-query";
+// import { QueryClientProvider } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 

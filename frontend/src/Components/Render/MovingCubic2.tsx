@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useState, useRef, useEffect } from "react";
+import { Canvas } from "@react-three/fiber";
 import SelectShapes from "./SelectShapes";
 import { useRecoilState } from "recoil";
 import { serverMessageState } from "../../States/ChatStates";
@@ -8,14 +8,14 @@ import { OrbitControls } from "@react-three/drei";
 import Light from "../Light/Light";
 import styled from "styled-components";
 import { query } from "../loader/loader";
-import { useQuery } from "@tanstack/react-query";
+
 import { queryClient } from "../../router";
 
 function MovingCubic2(props: any) {
-  const { controls, setControls } = props;
+  // const { controls, setControls } = props;
 
   const queryData = queryClient.getQueryData(query.queryKey);
-  const initialData = useQuery(query)?.data?.data || null;
+  // const initialData = useQuery(query)?.data?.data || null;
   console.log(queryData);
 
   const [browserWidth] = useState(1024);
