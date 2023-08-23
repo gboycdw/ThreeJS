@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { Canvas } from "@react-three/fiber";
 import SelectShapes from "./SelectShapes";
 import { useRecoilState } from "recoil";

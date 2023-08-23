@@ -1,13 +1,13 @@
-import "./App.css";
+import './App.css';
 
-import { RecoilRoot } from "recoil";
-import { router } from "./router";
-import { RouterProvider } from "react-router-dom";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { queryClient } from "./router";
+import { RecoilRoot } from 'recoil';
+import { router } from './router';
+import { RouterProvider } from 'react-router-dom';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { queryClient } from './router';
 // import { QueryClientProvider } from "@tanstack/react-query";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 
 const persister = createSyncStoragePersister({
   storage: window.localStorage,
@@ -16,10 +16,7 @@ const persister = createSyncStoragePersister({
 function App() {
   return (
     <RecoilRoot>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{ persister }}
-      >
+      <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
         <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={false} />
       </PersistQueryClientProvider>

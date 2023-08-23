@@ -1,7 +1,7 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Join from "../Components/Chat/join";
-import Combine from "./CombinePage";
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Join from '../Components/Chat/join';
+import Combine from './CombinePage';
 
 function JoinPage() {
   return (
