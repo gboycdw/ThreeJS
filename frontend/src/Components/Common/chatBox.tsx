@@ -1,6 +1,5 @@
-import React from "react";
-import { MessageType } from "../../States/ChatStates";
-import styled from "styled-components";
+import { MessageType } from '../../States/ChatStates';
+import styled from 'styled-components';
 
 export function MyChat(props: {
   chatList: MessageType[];
@@ -12,7 +11,7 @@ export function MyChat(props: {
       <StyledDiv className="w-35 h-40">
         {props.chatList.length > 0 &&
           props.chatList.map((a, index) => {
-            return a.user === "admin" ? (
+            return a.user === 'admin' ? (
               <StyledAdmin key={index}>
                 <StyledUser data={a.user}>{a.user}</StyledUser>
                 <StyledText>{a.text}</StyledText>
@@ -76,12 +75,12 @@ const StyledOthers = styled.ul`
 `;
 
 const StyledUser = styled.li<{ data?: string }>`
-  border: ${(props) => (props.data === "admin" ? "0.3px solid" : "")};
+  border: ${(props) => (props.data === 'admin' ? '0.3px solid' : '')};
   border-radius: 3px;
   width: fit-content;
   padding: 1.5px 1.5px;
   margin: 0px 2px;
-  font-weight: ${(props) => (props.data !== "admin" ? "bold" : "")};
+  font-weight: ${(props) => (props.data !== 'admin' ? 'bold' : '')};
 `;
 
 const StyledText = styled.li`

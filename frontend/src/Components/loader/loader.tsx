@@ -21,7 +21,7 @@ export const query: queryType = {
   staleTime: 30000,
 };
 
-export const loader = (queryClient: QueryClient) => async (params: LoaderFunctionArgs) => {
+export const loader = (queryClient: any) => async (params: LoaderFunctionArgs) => {
   console.log(queryClient);
   console.log(params);
   try {

@@ -111,7 +111,7 @@ function Chat() {
 
   return (
     <div className="grid">
-      <div className="grid w-fit space-y-3 border-2 m-2 p-2 bg-slate-200 justify-self-center">
+      <div className="m-2 grid w-fit space-y-3 justify-self-center border-2 bg-slate-200 p-2">
         <div className="bg-slate-100">
           Chat
           <div>방제 : {room}</div>
@@ -120,18 +120,18 @@ function Chat() {
             닉네임 변경
             <input
               value={newName}
-              className="bg-slate-200 border-2 border-black m-2 w-fit"
+              className="m-2 w-fit border-2 border-black bg-slate-200"
               onChange={(e) => {
                 setNewName(e.target.value);
               }}
             />
-            <button className="bg-slate-200 border-2 border-black m-2 w-fit" onClick={changeName}>
+            <button className="m-2 w-fit border-2 border-black bg-slate-200" onClick={changeName}>
               변경
             </button>
           </div>
           <div className="flex justify-between">
             <button
-              className="bg-slate-200 border-2 border-black m-2 w-fit"
+              className="m-2 w-fit border-2 border-black bg-slate-200"
               onClick={() => {
                 setChatList([]);
               }}
@@ -139,7 +139,7 @@ function Chat() {
               대화 초기화
             </button>
             <br />
-            <button className="bg-slate-200 border-2 border-black m-2 w-fit" onClick={leaveRoom}>
+            <button className="m-2 w-fit border-2 border-black bg-slate-200" onClick={leaveRoom}>
               채팅방 떠나기
             </button>
           </div>
