@@ -6,9 +6,10 @@
 //     extend: {},
 //   },
 //   plugins: [],
-// } satisfies Config;
+// } 
+//satisfies Config;
 
-/** @type {import('tailwindcss').Config} */
+// @type {import('tailwindcss').Config} 
 const plugin = require('tailwindcss/plugin');
 const defaultTheme = require('tailwindcss/defaultTheme');
 const { apply } = require('file-loader');
